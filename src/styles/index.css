@@ -1,0 +1,63 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --brand-gold: #cfba82;
+  --brand-gold-deep: #c8a767;
+  --brand-cream: #f4f3ec;
+  --brand-ink: #1a1a1a;
+  --brand-sea: #1c4b63;
+  color-scheme: light;
+}
+
+html,
+body,
+#root {
+  min-height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: "IBM Plex Sans Arabic", Syne, sans-serif;
+  background: var(--brand-cream);
+  color: var(--brand-ink);
+  -webkit-font-smoothing: antialiased;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+::selection {
+  background: rgba(207, 186, 130, 0.45);
+}
+
+.logo-spin-stage {
+  perspective: 1200px;
+}
+
+.logo-spin-inner {
+  transform-style: preserve-3d;
+  animation: spinY 4.5s linear infinite;
+}
+
+@keyframes spinY {
+  from {
+    transform: rotateY(0deg);
+  }
+  to {
+    transform: rotateY(360deg);
+  }
+}
+
+.thinking-stream {
+  white-space: pre-wrap;
+  line-height: 1.7;
+}
+
+.chat-md img {
+  border-radius: 0.75rem;
+  margin-top: 0.5rem;
+  max-width: 100%;
+}

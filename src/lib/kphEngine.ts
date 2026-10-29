@@ -111,29 +111,61 @@ function matchApartments(intent: Intent): AptCard[] {
   return list.slice(0, 4);
 }
 
-function buildThinking(intent: Intent, lang: "ar" | "en") {
-  if (lang === "en") {
+function snip(message: string, max = 90) {
+  const one = message.trim().replace(/\s+/g, " ");
+  return one.length <= max ? one : `${one.slice(0, max - 1)}…`;
+}
+
+function buildThinking(message: string, intent: Intent, lang: "ar" | "en") {
+  const lower = message.toLowerCase();
+  if (intent.isApartment) {
+    if (lang === "en") {
+      const lines = [
+        `Visitor asked: "${snip(message)}".`,
+        "This looks like an Al Watan Tower unit search.",
+      ];
+      if (intent.budget) lines.push(`Budget cue around AED ${intent.budget.toLocaleString("en-AE")}.`);
+      if (intent.type) lines.push(`Unit type cue: ${intent.type}.`);
+      if (intent.floor) lines.push(`Floor cue: ${intent.floor}.`);
+      lines.push("Matching demo inventory and preparing unit cards.");
+      return lines.join(" ");
+    }
     const lines = [
-      "Reading the visitor message and detecting language…",
-      `Query focus: ${intent.isApartment ? "unit search in Al Watan Tower" : "company / general enquiry"}.`,
+      `الزائر سأل: "${snip(message)}".`,
+      "يبدو بحث وحدة في برج الوطن.",
     ];
-    if (intent.budget) lines.push(`Budget signal detected around AED ${intent.budget.toLocaleString("en-AE")}.`);
-    if (intent.type) lines.push(`Preferred unit type: ${intent.type}.`);
-    if (intent.floor) lines.push(`Floor preference: ${intent.floor}.`);
-    lines.push("Checking Al Rasikhoon knowledge + Al Watan inventory…");
-    lines.push("Preparing a clear reply in English.");
+    if (intent.budget) lines.push(`إشارة ميزانية حوالي ${intent.budget.toLocaleString("ar-AE")} درهم.`);
+    if (intent.type) lines.push(`نوع الوحدة: ${typeLabel(intent.type, "ar")}.`);
+    if (intent.floor) lines.push(`تفضيل الطابق: ${intent.floor}.`);
+    lines.push("أطابق المخزون التجريبي وأجهّز بطاقات الوحدات.");
     return lines.join(" ");
   }
-  const lines = [
-    "أقرأ رسالة الزائر وأحدد اللغة…",
-    `محور السؤال: ${intent.isApartment ? "بحث وحدة في برج الوطن" : "استفسار عن الشركة / معلومات عامة"}.`,
-  ];
-  if (intent.budget) lines.push(`إشارة ميزانية حوالي ${intent.budget.toLocaleString("ar-AE")} درهم.`);
-  if (intent.type) lines.push(`نوع الوحدة المفضّل: ${typeLabel(intent.type, "ar")}.`);
-  if (intent.floor) lines.push(`تفضيل الطابق: ${intent.floor}.`);
-  lines.push("أراجع معرفة الراسخون ومخزون برج الوطن…");
-  lines.push("أجهّز رداً واضحاً بالعربية.");
-  return lines.join(" ");
+
+  let topicEn = "general company enquiry";
+  let topicAr = "استفسار عام عن الشركة";
+  if (/مبرمج|مطور|مطوّر|programmer|developer|who (built|made|coded)|من (عمل|صنع|برمج)|مين (عمل|برمج)/i.test(lower)) {
+    topicEn = "who built / programmed this website";
+    topicAr = "من برمج أو طوّر هذا الموقع";
+  } else if (/تفهم عربي|بتفهم عربي|understand arabic|speak arabic|عربي ولا/i.test(lower)) {
+    topicEn = "whether the assistant understands Arabic";
+    topicAr = "هل المساعد يفهم العربية";
+  } else if (/تواصل|contact|هاتف|phone|واتس|whatsapp|ايميل|email/i.test(lower)) {
+    topicEn = "company contact channels";
+    topicAr = "وسائل التواصل مع الشركة";
+  } else if (/موظف|team|adel|عادل|كريم|حسام|خليفة|توظيف|recruit/i.test(lower)) {
+    topicEn = "team / recruitment people";
+    topicAr = "الفريق أو التوظيف";
+  } else if (/وطن|watan|tower|برج/i.test(lower)) {
+    topicEn = "Al Watan Tower details";
+    topicAr = "تفاصيل برج الوطن";
+  } else if (/مشروع|project|قاسمية|سدر|صجعة/i.test(lower)) {
+    topicEn = "Al Rasikhoon projects";
+    topicAr = "مشاريع الراسخون";
+  }
+
+  return lang === "en"
+    ? `Visitor asked: "${snip(message)}". Topic: ${topicEn}. Pull only the facts needed for this question and answer directly.`
+    : `الزائر سأل: "${snip(message)}". الموضوع: ${topicAr}. أراجع فقط ما يلزم لهذا السؤال وأرد مباشرة.`;
 }
 
 function companyAnswer(message: string, lang: "ar" | "en") {
@@ -229,7 +261,7 @@ function apartmentAnswer(matches: AptCard[], lang: "ar" | "en") {
 export function buildKphReply(message: string, preferredLang?: string): KphReply {
   const lang = detectLang(message, preferredLang);
   const intent = detectIntent(message);
-  const thinking = buildThinking(intent, lang);
+  const thinking = buildThinking(message, intent, lang);
   if (intent.isApartment) {
     const apartments = matchApartments(intent);
     return { thinking, answer: apartmentAnswer(apartments, lang), apartments };

@@ -138,34 +138,70 @@ function buildThinking(intent: Intent, lang: "ar" | "en") {
 
 function companyAnswer(message: string, lang: "ar" | "en") {
   const lower = message.toLowerCase();
-  if (/موظف|team|موظف|adel|عادل|كريم|حسام|خليفة|elfaki|توظيف|recruit/i.test(lower)) {
+
+  if (/مبرمج|مطور|مطوّر|programmer|developer|who (built|made|coded|developed)|من (عمل|صنع|برمج|بنى|بني)|مين (عمل|برمج)/i.test(lower)) {
     return lang === "ar"
-      ? "من وجوه القيادة في الراسخون: خليفة سلطان بن حارب المهيري (المالك والمدير العام)، د. كريم أبو شليح (مدير المبيعات)، حسام عوض (المالية والإدارة)، محمد الفكي (سوشيال ميديا)، ومهندس محمد عادل (مسؤول التوظيف). للتواصل: 8005454 أو careers@alrasikhoon.ae"
-      : "Leadership includes Khalifa Sultan Bin Harib Almheiri (Owner & GM), Dr. Karim Aboushelih (Sales Director), Hossam Awad (Finance & Admin), Mohamed Elfaki (Social Media), and Eng. Mohamed Adel (Recruitment). Call 8005454 or careers@alrasikhoon.ae";
+      ? "مبرمج الموقع ده هو ناصر مصطفى. عمل الموقع ووكيل KPH كعرض قدرات لفرصة عمل في الراسخون، ودمجه مع باك إند Casco."
+      : "This site was built by Nasser Mostafa. He built the site and the KPH agent as a capability demo for a role at Al Rasikhoon, integrated with the Casco backend.";
   }
+
+  if (/تفهم عربي|بتفهم عربي|تتكلم عربي|understand arabic|speak arabic|عربي ولا/i.test(lower)) {
+    return lang === "ar"
+      ? "أيوه، بفهم عربي وإنجليزي. اسألني اللي تحتاجه عن الراسخون أو برج الوطن وأرد بنفس لغة سؤالك."
+      : "Yes — I understand Arabic and English. Ask about Al Rasikhoon or Al Watan Tower and I’ll reply in your language.";
+  }
+
+  if (/ذكاء|openai|open ai|كاسكو|casco|وكيل|ai agent|كيف تشتغل|ازاي تشتغل/i.test(lower)) {
+    return lang === "ar"
+      ? "أنا KPH مساعد الراسخون. مصمم يشتغل عبر Casco مع نماذج OpenAI للرد الطبيعي، ولو الخدمة البعيدة مش متاحة بوقت معيّن أكمّل محلياً عشان الشات يفضل شغال."
+      : "I’m KPH for Al Rasikhoon. I’m built to answer naturally through Casco with OpenAI models, and if the remote service is briefly unavailable I continue locally so chat stays up.";
+  }
+
+  if (/وطن|watan|tower|برج/i.test(lower)) {
+    return lang === "ar"
+      ? "برج الوطن على كورنيش عجمان: تملك حر، استوديو من حوالي 460 ألف درهم، غرفة وصالة من حوالي 838 ألف، غرفتين من حوالي 1.35 مليون، وثلاث غرف من حوالي 2.25 مليون. قولي ميزانيتك أو نوع الوحدة وأرشّح لك."
+      : "Al Watan Tower on Ajman Corniche: freehold. Studios from about AED 460k, 1BR from about 838k, 2BR from about 1.35M, 3BR from about 2.25M. Tell me your budget or unit type and I’ll shortlist options.";
+  }
+
+  if (/موظف|team|adel|عادل|كريم|حسام|خليفة|elfaki|توظيف|recruit/i.test(lower)) {
+    return lang === "ar"
+      ? "من وجوه القيادة: خليفة سلطان بن حارب المهيري (المالك والمدير العام)، د. كريم أبو شليح (المبيعات)، حسام عوض (المالية والإدارة)، محمد الفكي (سوشيال)، ومهندس محمد عادل (التوظيف). careers@alrasikhoon.ae أو 8005454."
+      : "Leadership includes Khalifa Sultan Bin Harib Almheiri (Owner & GM), Dr. Karim Aboushelih (Sales), Hossam Awad (Finance & Admin), Mohamed Elfaki (Social), and Eng. Mohamed Adel (Recruitment). careers@alrasikhoon.ae or 8005454.";
+  }
+
   if (/تواصل|contact|هاتف|phone|واتس|whatsapp|ايميل|email/i.test(lower)) {
     return lang === "ar"
-      ? "تواصل الراسخون: الخط المجاني 8005454 · واتساب https://wa.me/9718005454 · info@alrasikhoon.ae · المكتب: شارع خليفة بن زايد، النعيمية 1، عجمان."
-      : "Contact Al Rasikhoon: free call 8005454 · WhatsApp https://wa.me/9718005454 · info@alrasikhoon.ae · Office: Khalifa Bin Zayed St, Al Nuaimia 1, Ajman.";
+      ? "تقدر تتواصل على 8005454، واتساب https://wa.me/9718005454، أو info@alrasikhoon.ae — المكتب في شارع خليفة بن زايد، النعيمية 1، عجمان."
+      : "Reach them on 8005454, WhatsApp https://wa.me/9718005454, or info@alrasikhoon.ae — office on Khalifa Bin Zayed St, Al Nuaimia 1, Ajman.";
   }
+
   if (/سوشيال|social|انستا|instagram|فيسبوك|facebook|تيك/i.test(lower)) {
     return lang === "ar"
-      ? "صفحاتنا: Instagram @alrasikhoon.ae · Facebook alrasikhoon.ae · TikTok @alrasikhoon.ae · LinkedIn · YouTube · X @alrasikhoon · Telegram · Linktree linktr.ee/alrasikhoon"
-      : "Social: Instagram @alrasikhoon.ae · Facebook alrasikhoon.ae · TikTok @alrasikhoon.ae · LinkedIn · YouTube · X @alrasikhoon · Telegram · Linktree linktr.ee/alrasikhoon";
+      ? "حساباتهم: Instagram @alrasikhoon.ae · Facebook alrasikhoon.ae · TikTok @alrasikhoon.ae · LinkedIn · YouTube · X @alrasikhoon · Telegram · Linktree linktr.ee/alrasikhoon"
+      : "Socials: Instagram @alrasikhoon.ae · Facebook alrasikhoon.ae · TikTok @alrasikhoon.ae · LinkedIn · YouTube · X @alrasikhoon · Telegram · Linktree linktr.ee/alrasikhoon";
   }
+
   if (/مشروع|project|قاسمية|سدر|صجعة|مها|باهية/i.test(lower)) {
     return lang === "ar"
-      ? "من مشاريع الراسخون: بوابة القاسمية، روضة السدر، بساتين السرة، الصجعة الصناعية، الحليو، قرية المها، الباهية، وبرج الوطن على كورنيش عجمان. اسألني عن أي مشروع أو عن ميزانية شقة في برج الوطن."
-      : "Projects include Al Qasimiya Gate, Rawdat Al Sidr, Basatin Al Serra, Sajaa Industrial, Al Helio, Almaha Village, Albahia, and Al Watan Tower on Ajman Corniche. Ask about any project or a unit budget in Al Watan Tower.";
+      ? "من المشاريع: بوابة القاسمية، روضة السدر، بساتين السرة، الصجعة، الحليو، قرية المها، الباهية، وبرج الوطن. حابب تفاصيل مشروع معيّن؟"
+      : "Projects include Al Qasimiya Gate, Rawdat Al Sidr, Basatin Al Serra, Sajaa, Al Helio, Almaha Village, Albahia, and Al Watan Tower. Want details on one of them?";
   }
-  if (/مرحبا|السلام|hello|hi|hey|صباح|مساء/i.test(lower)) {
+
+  if (/عن الشركة|من هي|تأسس|founded|about (the )?company|الراسخون مين/i.test(lower)) {
     return lang === "ar"
-      ? "أهلاً بك! أنا KPH مساعد الراسخون. اسأل عن برج الوطن، الميزانية، المشاريع، الفريق، أو وسائل التواصل."
-      : "Welcome! I’m KPH for Al Rasikhoon. Ask about Al Watan Tower, budgets, projects, the team, or contact channels.";
+      ? "الراسخون العقارية تأسست 10 يونيو 2002، وتقييمها 5+ نجوم في عجمان. عندهم مشاريع أراضٍ وشقق، وأبرزها حالياً برج الوطن. عايز أسعار ولا تواصل؟"
+      : "Al Rasikhoon Real Estate was founded 10 June 2002 and is rated 5+ stars in Ajman. They offer land and apartment projects, notably Al Watan Tower. Want prices or contact details?";
   }
+
+  if (/مرحبا|السلام|hello|hi\b|hey|صباح|مساء/i.test(lower)) {
+    return lang === "ar"
+      ? "أهلاً! أنا KPH. اسألني عن برج الوطن، ميزانية شقة، المشاريع، الفريق، أو مين برمج الموقع."
+      : "Hi! I’m KPH. Ask about Al Watan Tower, a budget, projects, the team, or who built this site.";
+  }
+
   return lang === "ar"
-    ? "الراسخون العقارية تأسست 10 يونيو 2002. تقييم 5+ نجوم بعجمان. أبرز العروض حالياً تشمل برج الوطن (استوديو من حوالي 460 ألف درهم) ومشاريع أراضٍ في الشارقة وعجمان وأم القيوين. للاستفسار: 8005454."
-    : "Al Rasikhoon Real Estate was founded 10 June 2002, rated 5+ stars in Ajman. Highlights include Al Watan Tower (studios from about AED 460k) and land projects across Sharjah, Ajman and UAQ. Call 8005454.";
+    ? "فهمت سؤالك. قولي بالتحديد: أسعار برج الوطن، مشروع معيّن، تواصل الشركة، الفريق، أو مين برمج الموقع — وأجاوبك مباشرة."
+    : "Got it. Tell me exactly what you need: Al Watan prices, a project, company contacts, the team, or who built this site — and I’ll answer directly.";
 }
 
 function apartmentAnswer(matches: AptCard[], lang: "ar" | "en") {
